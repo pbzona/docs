@@ -58,7 +58,7 @@ Protecting your server against that threat is fairly simple, just edit the `/etc
 The `/etc/ssh/moduli` file ships with OpenSSH, so assuming two servers have the same version of OpenSSH, their default `moduli` files will be identical. This does *not* mean they are insecure; because Diffie-Hellman is an asymmetric algorithm, the keys it generates are incredibly difficult to crack when generated from sufficiently large primes. That being said, if you want to take the extra time to do so, you may generate new Diffie-Hellman parameters yourself:
 
     ssh-keygen -G "${HOME}/moduli" -b 2048
-    ssh-keygen -T /etc/ssh/moduli -f "${HOME}/moduli"
+    sudo ssh-keygen -T /etc/ssh/moduli -f "${HOME}/moduli"
     rm "${HOME}/moduli"
 
 {: .caution}
