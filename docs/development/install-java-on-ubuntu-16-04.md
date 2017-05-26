@@ -53,39 +53,58 @@ The Oracle JDK, or *Java Development Kit*, includes a development environment fo
 
     This package will run an installer for The Oracle JDK 8, which is the current stable release. You may also replace `java8` in the package name with `java7` or `java9` to install different versions, although these releases are not recommended for development.
 
+5.  Verify that Java and the Java compiler have been properly installed:
+
+        java -version
+        javac -version
+
+    As of this publication, these commands should return the following, respectively:
+
+        java version "1.8.0_131"
+        Java(TM) SE Runtime Environment (build 1.8.0_131-b11)
+        Java HotSpot(TM) 64-Bit Server VM (build 25.131-b11, mixed mode)
+
+        javac 1.8.0_131
+
+6.  Since the PPA only provides an installer, and not updates for the JDK itself, you may want to delete it when you're finished in order to keep your repositories organized:
+
+        sudo add-apt-repository -r ppa:webupd8team/java
+
 ## Set JAVA_HOME
 
-1.  Many applications use the `JAVA_HOME` environment variable to determine where Java is installed. To find your installation location:
+Many applications include code or configuration that references the `JAVA_HOME` environment variable. This variable points them to the Java binary file, allowing them to run Java code.
 
-        which java
+1.  To set the variable for your system:
 
-    Copy the output and open the `/etc/environment` file in a text editor. Add the following line to the end of the file:
-
-    {: .file-excerpt}
-    /etc/environment
-    :   ~~~
-        JAVA_HOME=/usr/bin/java
-        ~~~
-
-    Replace `/usr/bin/java` with the path to the binary you copied previously, if it's different. Save and exit the file.
+        echo "JAVA_HOME=$(which java)" | sudo tee -a /etc/environment
 
 2.  Reload your system's environment variables:
 
         source /etc/environment
 
-3.  To test whether the variable was set correctly:
+3.  Verify the variable was set correctly:
 
         echo $JAVA_HOME
 
-    This should return the path to the Java binary.
+    This should return the path to the Java binary, which applications can use when executing commands.
 
 ## OpenJDK
 
-The above installation methods allow you to use the Oracle JDK, which is be bound by licensing terms and includes proprietary components. Fortunately, OpenJDK provides an open-source alternative that is just as easy to install.
+The above installation methods allow you to use the Oracle JDK, which is be bound by licensing terms and includes proprietary components. If you're not careful, this can pose an issue when developing production applications.
+
+Fortunately, OpenJDK provides an open-source alternative that is just as easy to install.
 
 To install OpenJDK:
 
     sudo apt-get install openjdk-8-jdk
+
+The installation will provide you with the OpenJDK, which includes a runtime environment and compiler. This allows you to develop your own Java applications and run them on your Linode.
+
+However, if you only need to run applications that you've already downloaded, you can save a bit of disk space by installing the OpenJRE (Java runtime environment):
+
+    sudo apt-get install openjdk-8-jre
+
+Note that this is unnecessary if you've installed OpenJDK, since it includes the JRE.
 
 {: .caution}
 > OpenJDK and Oracle Java are *not* identical. There may be licensing, performance, and stability differences, and this should be considered carefully when developing production applications.
